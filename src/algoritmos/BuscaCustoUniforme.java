@@ -3,7 +3,6 @@ package algoritmos;
 import arvore.TreeNode;
 import problema.Estado;
 import sistema.Agente;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +39,41 @@ public class BuscaCustoUniforme implements Busca
 
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-    public int[] getPlano()
-    {
-        int[] plan = {N,N,N,NE,L,L,L,L,NE,NE,L};
-        return plan;
+    public int[] getPlano() {
+
+        List<Integer> plan = new ArrayList<>();
+        List<TreeNode> fronteira = new ArrayList<>();
+        TreeNode currentNodeCheck;
+        boolean foundSolution = false;
+        int minimumCost = 0, objectivePathIndex = 0;
+        fronteira.addAll(this.root.getChildren());
+        while(!foundSolution){
+            for(int i = 0; i < fronteira.size(); i++){
+                if(fronteira.get(minimumCost).getGn() > fronteira.get(i).getGn())
+                    minimumCost = i;
+            }
+            fronteira.addAll(fronteira.get(minimumCost).getChildren());
+            fronteira.remove(minimumCost);
+            if(this.agente.getProblem().testeObjetivo(fronteira.get(minimumCost).getState())) {
+                foundSolution = true;
+                objectivePathIndex = minimumCost;
+                System.out.printf("Col = %2d || Lin = %2d || Price = %f \n", fronteira.get(minimumCost).getState().getCol(),fronteira.get(minimumCost).getState().getLin(), fronteira.get(minimumCost).getGn());
+            }
+            minimumCost = 0 ;
+        }
+        currentNodeCheck = fronteira.get(minimumCost);
+        plan.add(currentNodeCheck.getAction());
+        while(currentNodeCheck != root){
+            plan.add(currentNodeCheck.getParent().getAction());
+            System.out.println(currentNodeCheck.getParent().getAction());
+            currentNodeCheck = currentNodeCheck.getParent();
+        }
+
+        int [] actionPlan = new int[plan.size()];
+        for(int i  = 0; i < plan.size(); i++){
+            actionPlan[i] = plan.get(plan.size()-i-1);
+        }
+        return actionPlan;
     }
 
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -57,8 +87,6 @@ public class BuscaCustoUniforme implements Busca
 
         int acao = 0;
         for (int each : this.agente.getProblem().acoesPossiveis(currentNode.getState())) {
-
-
             if (each != -1) {
                 Estado nextState = this.agente.getProblem().suc(currentNode.getState(), acao);
 
