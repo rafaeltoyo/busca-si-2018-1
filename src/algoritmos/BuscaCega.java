@@ -1,21 +1,23 @@
 package algoritmos;
 
 import arvore.TreeNode;
+import arvore.fnComparator;
 import problema.Estado;
 import sistema.Agente;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
 
 abstract public class BuscaCega implements Busca
 {
     private Agente agente;
     private TreeNode root;
-    private Collection<TreeNode> frontier;
     private Heuristica heuristica;
     private final List<Estado> visited = new ArrayList<>();
     private TreeNode finalNode;
+    protected PriorityQueue<TreeNode> frontier;
 
     public BuscaCega(Agente agente)
     {
@@ -24,10 +26,10 @@ abstract public class BuscaCega implements Busca
 
     public BuscaCega(Agente agente, Heuristica heuristica)
     {
-        this(agente, heuristica, new ArrayList<>());
+        this(agente, heuristica, new PriorityQueue<>(new fnComparator()));
     }
 
-    protected BuscaCega(Agente agente, Heuristica heuristica, Collection<TreeNode> frontier)
+    protected BuscaCega(Agente agente, Heuristica heuristica, PriorityQueue<TreeNode> frontier)
     {
         this.agente = agente;
 
@@ -63,31 +65,11 @@ abstract public class BuscaCega implements Busca
 
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-    /**
-     *
-     * @implSpec retornar o próximo nó a ser explorado pela Busca
-     * @return TreeNode
-     */
-    abstract protected boolean cmpNextNode(TreeNode current, TreeNode next);
-
     protected TreeNode getNextNode() {
-        TreeNode nextNode = null;
-
-        for (TreeNode node: this.frontier) {
-            if (nextNode == null) {
-                nextNode = node;
-                continue;
-            }
-
-            if (this.cmpNextNode(nextNode, node))
-                nextNode = node;
-        }
-
-        this.frontier.remove(nextNode);
-        return nextNode;
+        return this.frontier.poll();
     }
 
-/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
     protected void exploreNode(TreeNode currentNode)
     {
