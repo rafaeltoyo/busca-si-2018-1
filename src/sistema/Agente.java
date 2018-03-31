@@ -1,7 +1,7 @@
 package sistema;
 
-import algoritmos.Busca;
-import algoritmos.BuscaCustoUniforme;
+import algoritmos.BuscaEstrela;
+import algoritmos.HeuristicaManhattan;
 import ambiente.*;
 import problema.*;
 import comuns.*;
@@ -43,8 +43,8 @@ public class Agente implements PontosCardeais {
         this.estAtu = prob.estIni;
         this.custo = 0;
 
-        BuscaCustoUniforme estrategia = new BuscaCustoUniforme(this);
-        estrategia.printArvoreBusca();
+        BuscaEstrela teste = new BuscaEstrela(this, new HeuristicaManhattan());
+        teste.exec();
     }
     
     /**Escolhe qual ação (UMA E SOMENTE UMA) será executada em um ciclo de raciocínio
