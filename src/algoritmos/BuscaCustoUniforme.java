@@ -57,6 +57,7 @@ public class BuscaCustoUniforme implements Busca
             if(this.agente.getProblem().testeObjetivo(fronteira.get(minimumCost).getState())) {
                 foundSolution = true;
                 objectivePathIndex = minimumCost;
+                System.out.printf("Iterations: %2d \n", counter);
             }
             else {
                 fronteira.addAll(expandNodeFromPActions(fronteira.get(minimumCost)));

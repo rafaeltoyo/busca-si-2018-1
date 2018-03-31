@@ -30,7 +30,7 @@ public class BuscaEstrela implements Busca
      *
      * @param agente {@link Agente}
      */
-    public BuscaCustoUniforme(Agente agente)
+    public BuscaEstrela(Agente agente)
     {
         this.agente = agente;
         this.root = new TreeNode();
@@ -51,20 +51,21 @@ public class BuscaEstrela implements Busca
         jaVisitados.add(this.root.getState());
         while(!foundSolution){
             for(int i = 0; i < fronteira.size(); i++){
-                if(fronteira.get(minimumCost).getGn() > fronteira.get(i).getGn())
+                if(fronteira.get(minimumCost).getFn() > fronteira.get(i).getFn())
                     minimumCost = i;
             }
             if(this.agente.getProblem().testeObjetivo(fronteira.get(minimumCost).getState())) {
                 foundSolution = true;
                 objectivePathIndex = minimumCost;
+                System.out.printf("Iterations: %2d \n", counter);
             }
             else {
                 fronteira.addAll(expandNodeFromPActions(fronteira.get(minimumCost)));
                 jaVisitados.add(fronteira.get(minimumCost).getState());
                 fronteira.remove(minimumCost);
                 minimumCost = 0;
-                counter++;
             }
+            counter++;
         }
         currentNodeCheck = fronteira.get(objectivePathIndex);
 
