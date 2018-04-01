@@ -1,7 +1,5 @@
 package sistema;
 
-import algoritmos.BuscaEstrela;
-import algoritmos.HeuristicaManhattan;
 import ambiente.*;
 import problema.*;
 import comuns.*;
@@ -15,9 +13,13 @@ public class Agente implements PontosCardeais {
     Model model;
     Problema prob;
     Estado estAtu; // guarda o estado atual (posição atual do agente)
-    int plan[]={N,N,N,NE,L,L,L,L,NE,NE,L};
+    Plano plan;
+
+    int planTest[]={N,N,N,NE,L,L,L,L,NE,NE,L};
     double custo;
     static int ct = -1;
+
+
            
     public Agente(Model m) {
         this.model = m;
@@ -42,9 +44,6 @@ public class Agente implements PontosCardeais {
         prob.defEstObj(2, 8);
         this.estAtu = prob.estIni;
         this.custo = 0;
-
-        BuscaEstrela teste = new BuscaEstrela(this, new HeuristicaManhattan());
-        teste.exec();
     }
     
     /**Escolhe qual ação (UMA E SOMENTE UMA) será executada em um ciclo de raciocínio
@@ -56,29 +55,35 @@ public class Agente implements PontosCardeais {
         ap = prob.acoesPossiveis(estAtu);
 
         // nao atingiu objetivo e ha acoesPossiveis a serem executadas no plano
-        if (!prob.testeObjetivo(estAtu) && ct < plan.length) {
-           System.out.println("estado atual: " + estAtu.getLin() + "," + estAtu.getCol());
-           System.out.print("açoes possiveis: {");
-           for (int i=0;i<ap.length;i++) {
-               if (ap[i]!=-1)
-                   System.out.print(acao[i]+" ");
-           }
+        //if (!prob.testeObjetivo(estAtu) && ct < planTest.length) {
+        if (!prob.testeObjetivo(estAtu) && plan.nextAction()) {
 
-           executarIr(plan[ct]);
-           
-           // atualiza custo
-           if (plan[ct] % 2 == 0 ) // acoes pares = N, L, S, O
-               custo = custo + 1;
-           else
-               custo = custo + 1.5;
-           
-           System.out.println("}\nct = "+ ct + " de " + (plan.length-1) + " ação escolhida=" + acao[plan[ct]]);
-           System.out.println("custo ate o momento: " + custo);
-           System.out.println("**************************\n\n");
-           
-           // atualiza estado atual - sabendo que o ambiente eh deterministico
-           estAtu = prob.suc(estAtu, plan[ct]);
-                      
+            System.out.println("estado atual: " + estAtu.getLin() + "," + estAtu.getCol());
+            System.out.print("açoes possiveis: {");
+            for (int i=0;i<ap.length;i++) {
+                if (ap[i]!=-1)
+                    System.out.print(acao[i]+" ");
+            }
+
+            //executarIr(planTest[ct]);
+            executarIr(plan.getAction());
+
+            // atualiza custo
+            //if (planTest[ct] % 2 == 0 ) // acoes pares = N, L, S, O
+            //    custo = custo + 1;
+            //else
+            //    custo = custo + 1.5;
+            custo = plan.getCurrentCost();
+
+            //System.out.println("}\nct = "+ ct + " de " + (planTest.length-1) + " ação escolhida=" + acao[planTest[ct]]);
+            System.out.println("}\nct = "+ ct + " de " + plan.getPlanSize() + " ação escolhida=" + acao[plan.getAction()]);
+            System.out.println("custo ate o momento: " + custo);
+            System.out.println("**************************\n\n");
+
+            // atualiza estado atual - sabendo que o ambiente eh deterministico
+            //estAtu = prob.suc(estAtu, planTest[ct]);
+            estAtu = prob.suc(estAtu, plan.getAction());
+
         }
         else
             return (-1);
@@ -106,15 +111,13 @@ public class Agente implements PontosCardeais {
         return new Estado(pos[0], pos[1]);
     }
 
-    public Problema getProblem()
-    {
-        return this.prob;
-    }
+    public Problema getProblem() { return this.prob; }
 
-    public Model getModel()
-    {
-        return this.model;
-    }
+    public Model getModel() { return this.model; }
+
+    public Plano getPlan() { return plan; }
+
+    public void setPlan(Plano plan) { this.plan = plan; }
 }
     
 
