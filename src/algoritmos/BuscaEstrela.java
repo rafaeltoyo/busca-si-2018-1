@@ -9,4 +9,7 @@ public class BuscaEstrela extends BuscaCega
     {
         super(agente, heuristica);
     }
+
+    @Override
+    protected String getTitle() { return "@@@ Busca A* com heurística '" + this.heuristica.toString() + "' @@@"; }
 }

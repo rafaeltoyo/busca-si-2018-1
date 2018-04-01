@@ -9,4 +9,7 @@ public class HeuristicaDummy implements Heuristica
     public float Hn(Estado current, Estado goal) {
         return 0;
     }
+
+    @Override
+    public String toString() { return "DUMMY"; }
 }

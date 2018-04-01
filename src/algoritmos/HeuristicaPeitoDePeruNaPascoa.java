@@ -13,4 +13,7 @@ public class HeuristicaPeitoDePeruNaPascoa implements Heuristica
     public float Hn(Estado current, Estado goal) {
         return (float) sqrt(pow((goal.getLin() - current.getLin()), 2) + pow((goal.getCol() - current.getCol()), 2));
     }
+
+    @Override
+    public String toString() { return "DIAGONAL"; }
 }

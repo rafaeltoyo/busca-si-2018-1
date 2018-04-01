@@ -5,7 +5,10 @@
  */
 package sistema;
 
+import algoritmos.*;
 import ambiente.*;
+
+import java.util.Scanner;
 
 /**
  *
@@ -36,7 +39,20 @@ public class Main {
         
         // Cria um agente
         Agente ag = new Agente(model);
-        
+
+        // Escolher o método de busca
+        BuscaCega busca = InputController.getInstance().getBusca(ag);
+        busca.exec();
+        try {
+            busca.setAgentePlan();
+        } catch (Exception e) {
+            System.out.println("Erro na execução da busca:");
+            System.out.println("\t" + e.getMessage());
+            return;
+        }
+
+        busca.printDesempenho();
+
         // Ciclo de execucao do sistema
         // desenha labirinto
         model.desenhar(); 
