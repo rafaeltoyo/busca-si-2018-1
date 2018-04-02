@@ -1,4 +1,4 @@
-package algoritmos;
+package algoritmos.heuristica;
 
 import problema.Estado;
 

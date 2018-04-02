@@ -1,5 +1,6 @@
-package algoritmos;
+package algoritmos.busca;
 
+import algoritmos.heuristica.Heuristica;
 import arvore.*;
 import problema.*;
 import sistema.Agente;
@@ -15,20 +16,20 @@ abstract public class BuscaCega implements Busca
     // Raiz da árvore de busca
     private TreeNode root;
     // Heurística a ser adotada para cálculo do Hn
-    protected Heuristica heuristica;
+    private Heuristica heuristica;
     // Lista dos estados já explorados
     private final List<Estado> visited = new ArrayList<>();
     // Nó da árvore de busca que contém a solução encontrada
     private TreeNode finalNode;
     // Fronteira da busca
-    protected PriorityQueue<TreeNode> frontier;
+    private PriorityQueue<TreeNode> frontier;
 
     // --- Contadores
     private int ct_nos_arvore_busca = 0;
     private int ct_ja_explorados = 0;
     private int ct_descartados_front = 0;
 
-    /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
     public BuscaCega(Agente agente, Heuristica heuristica)
     {
@@ -50,7 +51,8 @@ abstract public class BuscaCega implements Busca
 
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-    public void exec() {
+    public void exec() throws RuntimeException
+    {
         // Adiciona a raiz da árvore de busca na fronteira para iniciar a busca
         this.frontier.add(this.root);
         this.ct_nos_arvore_busca++;
@@ -71,7 +73,7 @@ abstract public class BuscaCega implements Busca
 
         } while (this.frontier.size() > 0); // Enquanto a fronteira possuir nós
 
-        System.out.println("Erro ao encontrar o objetivo");
+        throw new RuntimeException("Erro ao encontrar o objetivo");
     }
 
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -227,5 +229,7 @@ abstract public class BuscaCega implements Busca
 /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
     public TreeNode getArvoreBusca() { return this.root; }
+
+    public Heuristica getHeuristica() { return this.heuristica; }
 
 }

@@ -1,5 +1,6 @@
-package algoritmos;
+package algoritmos.busca;
 
+import algoritmos.heuristica.HeuristicaDummy;
 import sistema.Agente;
 
 public class BuscaCustoUni extends BuscaEstrela
