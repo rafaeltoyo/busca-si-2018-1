@@ -2,7 +2,6 @@ package algoritmos;
 
 import problema.Estado;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 

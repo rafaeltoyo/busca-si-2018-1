@@ -55,7 +55,6 @@ public class Agente implements PontosCardeais {
         ap = prob.acoesPossiveis(estAtu);
 
         // nao atingiu objetivo e ha acoesPossiveis a serem executadas no plano
-        //if (!prob.testeObjetivo(estAtu) && ct < planTest.length) {
         if (!prob.testeObjetivo(estAtu) && plan.nextAction()) {
 
             System.out.println("estado atual: " + estAtu.getLin() + "," + estAtu.getCol());
@@ -65,23 +64,16 @@ public class Agente implements PontosCardeais {
                     System.out.print(acao[i]+" ");
             }
 
-            //executarIr(planTest[ct]);
             executarIr(plan.getAction());
 
             // atualiza custo
-            //if (planTest[ct] % 2 == 0 ) // acoes pares = N, L, S, O
-            //    custo = custo + 1;
-            //else
-            //    custo = custo + 1.5;
             custo = plan.getCurrentCost();
 
-            //System.out.println("}\nct = "+ ct + " de " + (planTest.length-1) + " ação escolhida=" + acao[planTest[ct]]);
             System.out.println("}\nct = "+ ct + " de " + plan.getPlanSize() + " ação escolhida=" + acao[plan.getAction()]);
             System.out.println("custo ate o momento: " + custo);
             System.out.println("**************************\n\n");
 
             // atualiza estado atual - sabendo que o ambiente eh deterministico
-            //estAtu = prob.suc(estAtu, planTest[ct]);
             estAtu = prob.suc(estAtu, plan.getAction());
 
         }
