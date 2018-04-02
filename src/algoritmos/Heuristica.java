@@ -5,7 +5,7 @@ import problema.Estado;
 public interface Heuristica
 {
 
-    public float Hn(Estado current, Estado goal);
+    float Hn(Estado current, Estado goal);
 
-    public String toString();
+    String toString();
 }

@@ -1,7 +1,6 @@
 package algoritmos;
 
 import arvore.*;
-import comuns.*;
 import problema.*;
 import sistema.Agente;
 
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-abstract public class BuscaCega implements Busca {
-
+abstract public class BuscaCega implements Busca
+{
     // Agente que vai receber o plano gerado pela busca
     private Agente agente;
     // Raiz da árvore de busca
@@ -31,18 +30,21 @@ abstract public class BuscaCega implements Busca {
 
     /* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-    public BuscaCega(Agente agente, Heuristica heuristica) {
+    public BuscaCega(Agente agente, Heuristica heuristica)
+    {
         this(agente, heuristica, new PriorityQueue<>(new fnComparator()));
     }
 
-    protected BuscaCega(Agente agente, Heuristica heuristica, PriorityQueue<TreeNode> frontier) {
+    protected BuscaCega(Agente agente, Heuristica heuristica, PriorityQueue<TreeNode> frontier)
+    {
+        // Salvar o agente que receberá o plano da busca
         this.agente = agente;
-
+        // Gerar a raiz da árvore da busca
         this.root = new TreeNode();
         this.root.setState(this.agente.getProblem().estIni);
-
+        // Salvar a estrutura da fronteira
         this.frontier = frontier;
-
+        // Salvar a heurística da busca
         this.heuristica = heuristica;
     }
 
@@ -125,18 +127,21 @@ abstract public class BuscaCega implements Busca {
         }
 
         TreeNode old = null;
-
+        // Procurar um nó que referência o mesmo estado do nó atual
+        // (mesmo destino porém possivelmente com outro percurso)
         for (TreeNode frontierNode : this.frontier) {
             if (frontierNode.getState().igualAo(node.getState())) {
                 this.ct_descartados_front++;
+                // O nó atual possui um custo menor que ao da fronteira?
                 if (frontierNode.getFn() > node.getFn()) {
-                    old = frontierNode;
+                    old = frontierNode; // retirar o pior da fronteira
                 } else {
-                    old = node;
+                    old = node; // nó atual não entra na fronteira
                 }
                 break;
             }
         }
+        // Tem nó para tirar da fronteira?
         if (old !=  null) {
             this.frontier.add(node);
             this.frontier.remove(old);
@@ -191,6 +196,7 @@ abstract public class BuscaCega implements Busca {
 
         System.out.println("Árvore de Busca gerada: ");
         this.printArvoreBusca();
+
         System.out.println("--------------------");
     }
 

@@ -8,8 +8,6 @@ package sistema;
 import algoritmos.*;
 import ambiente.*;
 
-import java.util.Scanner;
-
 /**
  *
  * @author tacla
