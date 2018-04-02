@@ -1,4 +1,4 @@
-package algoritmos;
+package algoritmos.busca;
 
 /**
  * Busca: classe base para todas buscas que controem um plano para um agente

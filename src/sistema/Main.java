@@ -5,62 +5,50 @@
  */
 package sistema;
 
-import algoritmos.*;
-import ambiente.*;
+import algoritmos.busca.BuscaCega;
+import algoritmos.busca.TipoBusca;
+import controller.BuscaController;
+import controller.ExecController;
+import controller.ModelController;
+import controller.ViewController;
 
 /**
  *
  * @author tacla
  */
-public class Main {
-    public static void main(String args[]) {
-        // Cria o ambiente (modelo) = labirinto com suas paredes
-        Model model = new Model(9, 9);
-        model.labir.porParedeVertical(0, 1, 0);
-        model.labir.porParedeVertical(0, 0, 1);
-        model.labir.porParedeVertical(5, 8, 1);
-        model.labir.porParedeVertical(5, 5, 2);
-        model.labir.porParedeVertical(8, 8, 2);
-        model.labir.porParedeHorizontal(4, 7, 0);
-        model.labir.porParedeHorizontal(7, 7, 1);
-        model.labir.porParedeHorizontal(3, 5, 2);
-        model.labir.porParedeHorizontal(3, 5, 3);
-        model.labir.porParedeHorizontal(7, 7, 3);
-        model.labir.porParedeVertical(6, 7, 4);
-        model.labir.porParedeVertical(5, 6, 5);
-        model.labir.porParedeVertical(5, 7, 7);
-        
-        // seta a posição inicial do agente no ambiente - nao interfere no 
-        // raciocinio do agente, somente no amibente simulado
-        model.setPos(8, 0);
-        model.setObj(2, 8);
-        
-        // Cria um agente
-        Agente ag = new Agente(model);
+public class Main
+{
+    public static void main(String args[])
+    {
+        ModelController.getInstance();
+        BuscaController.getInstance();
+        ViewController.getInstance();
+        ExecController.getInstance();
 
-        // Escolher o método de busca
-        BuscaCega busca = InputController.getInstance().getBusca(ag);
-        busca.exec();
-        try {
-            busca.setAgentePlan();
-        } catch (Exception e) {
-            System.out.println("Erro na execução da busca:");
-            System.out.println("\t" + e.getMessage());
-            return;
-        }
-
-        busca.printDesempenho();
-
-        // Ciclo de execucao do sistema
-        // desenha labirinto
-        model.desenhar(); 
-        
-        // agente escolhe proxima açao e a executa no ambiente (modificando
-        // o estado do labirinto porque ocupa passa a ocupar nova posicao)
-        
-        System.out.println("\n*** Inicio do ciclo de raciocinio do agente ***\n");
-        while (ag.deliberar() != -1) {  
-            model.desenhar(); 
-        }
+        runAll();
     }
+
+    public static void runAll()
+    {
+        ExecController.getInstance().run(TipoBusca.CUSTO_UNI);
+        BuscaCega busca1 = BuscaController.getInstance().getBusca();
+        ExecController.getInstance().run(TipoBusca.ESTRELA_1);
+        BuscaCega busca2 = BuscaController.getInstance().getBusca();
+        ExecController.getInstance().run(TipoBusca.ESTRELA_2);
+        BuscaCega busca3 = BuscaController.getInstance().getBusca();
+
+        ViewController.printDesempenho(busca1);
+        ViewController.printDesempenho(busca2);
+        ViewController.printDesempenho(busca3);
+        ViewController.printSeparador();
+    }
+
+    public static void runInput()
+    {
+        ExecController.getInstance().run(ViewController.getInstance().printTipoBuscaOptions());
+
+        ViewController.printDesempenho(BuscaController.getInstance().getBusca());
+        ViewController.printSeparador();
+    }
+
 }
