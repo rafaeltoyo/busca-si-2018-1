@@ -1,8 +1,9 @@
 package controller;
 
 import algoritmos.busca.*;
-import algoritmos.heuristica.HeuristicaManhattan;
-import algoritmos.heuristica.HeuristicaPeitoDePeruNaPascoa;
+import algoritmos.heuristica.HeuristicaChebyshev;
+import algoritmos.heuristica.HeuristicaColunas;
+import algoritmos.heuristica.HeuristicaEuclidiana;
 import sistema.Agente;
 
 public class BuscaController
@@ -34,10 +35,10 @@ public class BuscaController
                 this.busca = new BuscaCustoUni(this.agente);
                 break;
             case ESTRELA_1:
-                this.busca = new BuscaEstrela(this.agente, new HeuristicaManhattan());
+                this.busca = new BuscaEstrela(this.agente, new HeuristicaColunas());
                 break;
             case ESTRELA_2:
-                this.busca = new BuscaEstrela(this.agente, new HeuristicaPeitoDePeruNaPascoa());
+                this.busca = new BuscaEstrela(this.agente, new HeuristicaEuclidiana());
                 break;
         }
     }

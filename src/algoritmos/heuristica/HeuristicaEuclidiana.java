@@ -5,7 +5,7 @@ import problema.Estado;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
-public class HeuristicaPeitoDePeruNaPascoa implements Heuristica
+public class HeuristicaEuclidiana implements Heuristica
 {
 
     @Override
@@ -14,5 +14,5 @@ public class HeuristicaPeitoDePeruNaPascoa implements Heuristica
     }
 
     @Override
-    public String toString() { return "DIAGONAL"; }
+    public String toString() { return "EUCLIDIANA"; }
 }
