@@ -3,8 +3,8 @@ package algoritmos.busca;
 import arvore.TreeNode;
 import arvore.fnComparator;
 import problema.Estado;
-import problema.Plano;
-import problema.PlanoBuscaOffline;
+import algoritmos.plano.Plano;
+import algoritmos.plano.PlanoBuscaOffline;
 import problema.Problema;
 import sistema.Agente;
 

@@ -1,4 +1,4 @@
-package problema;
+package algoritmos.plano;
 
 public interface Plano
 {
