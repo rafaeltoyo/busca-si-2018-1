@@ -1,6 +1,7 @@
 package algoritmos.plano;
 
 import arvore.TreeNode;
+import problema.Estado;
 
 import java.util.Stack;
 
@@ -33,6 +34,11 @@ public class PlanoBuscaOffline implements Plano
     @Override
     public int getPlanSize() {
         return plan.size();
+    }
+
+    @Override
+    public void updatePlan(Estado currentState) {
+        // ack
     }
 
     public Stack<TreeNode> getPlan() {

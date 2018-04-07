@@ -41,6 +41,9 @@ public class Agente implements PontosCardeais {
         // Primeira iteração do deliberar execura a busca para resgatar o plano do agente
         if (++ct == 0) plan = busca.exec();
 
+        // Utilização do sensor
+        plan.updatePlan(this.sensorPosicao());
+
         int[] ap = prob.acoesPossiveis(estAtu);
         // Não atingiu objetivo e há acoesPossiveis a serem executadas no plano
         if (!prob.testeObjetivo(estAtu) && plan.nextAction()) {
