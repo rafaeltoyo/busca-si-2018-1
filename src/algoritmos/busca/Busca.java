@@ -1,6 +1,6 @@
 package algoritmos.busca;
 
-import problema.Plano;
+import algoritmos.plano.Plano;
 
 /**
  * Busca: classe base para todas buscas que controem um plano para um agente

@@ -1,6 +1,7 @@
 package sistema;
 
 import algoritmos.busca.Busca;
+import algoritmos.plano.Plano;
 import ambiente.*;
 import controller.ViewController;
 import problema.*;
