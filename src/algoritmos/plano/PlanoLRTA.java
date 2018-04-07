@@ -7,19 +7,13 @@ public class PlanoLRTA implements Plano
 {
 
     /**
-     * Referência para a BuscaLRTA para obter informações
-     */
-    private BuscaLRTA busca;
-
-    /**
      * Crença de aonde o agente está
      */
     private Estado current;
 
-    public PlanoLRTA(BuscaLRTA busca)
+    public PlanoLRTA()
     {
-        this.busca = busca;
-        this.current = this.busca.getProblema().estIni;
+        this.current = BuscaLRTA.getProblema().estIni;
     }
 
     /**
@@ -30,7 +24,7 @@ public class PlanoLRTA implements Plano
     @Override
     public boolean nextAction()
     {
-        this.busca.getProblema().acoesPossiveis(this.current);
+        BuscaLRTA.getProblema().acoesPossiveis(this.current);
         // Trabalhar com as ações possíveis
         // ...
         return true;

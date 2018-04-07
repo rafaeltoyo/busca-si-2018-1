@@ -6,49 +6,42 @@ import algoritmos.plano.PlanoLRTA;
 import problema.Estado;
 import problema.Problema;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class BuscaLRTA extends BuscaOnline
 {
 
     /**
      * Memória de labirinto anterior para comparação
      */
-    private float[][] memory;
+    private static float[][] memory;
 
     /**
      * Problema que está sendo tratado
      */
-    private Problema problema;
+    private static Problema problema;
 
     /**
      * Heurística escolhida para essa busca
      */
-    private Heuristica heuristica;
+    private static Heuristica heuristica;
 
     /**
      * Salvar uma referência para o último plano gerado
      */
     private Plano currentPlan;
 
-    public BuscaLRTA(Problema problema, Heuristica heuristica)
-    {
-        this.problema = problema;
-        this.heuristica = heuristica;
-        this.memory = new float[problema.crencaLabir.getMaxLin()][problema.crencaLabir.getMaxCol()];
-        resetMemory();
-    }
+    public BuscaLRTA() { }
 
     /**
      * Iniciar a memória do Problema com os valores resultantes da Heurística escolhida
      */
-    protected void resetMemory()
+    public static void resetMemory(Problema problema, Heuristica heuristica)
     {
+        BuscaLRTA.problema = problema;
+        BuscaLRTA.heuristica = heuristica;
+        BuscaLRTA.memory = new float[problema.crencaLabir.getMaxLin()][problema.crencaLabir.getMaxCol()];
         for (int lin = 0; lin < problema.crencaLabir.getMaxLin(); lin++) {
             for (int col = 0; col < problema.crencaLabir.getMaxCol(); col++) {
-                this.memory[lin][col] = heuristica.Hn(new Estado(lin, col), problema.estObj);
+                BuscaLRTA.memory[lin][col] = heuristica.Hn(new Estado(lin, col), problema.estObj);
             }
         }
     }
@@ -60,7 +53,7 @@ public class BuscaLRTA extends BuscaOnline
     @Override
     public Plano exec()
     {
-        this.currentPlan = new PlanoLRTA(this);
+        this.currentPlan = new PlanoLRTA();
         return this.currentPlan;
     }
 
@@ -76,19 +69,12 @@ public class BuscaLRTA extends BuscaOnline
 
     }
 
-    public float[][] getMemory() {
-        return memory;
-    }
+    public static float[][] getMemory() { return BuscaLRTA.memory; }
 
-    public Problema getProblema() {
-        return problema;
-    }
+    public static Problema getProblema() { return BuscaLRTA.problema; }
 
-    public Heuristica getHeuristica() {
-        return heuristica;
-    }
+    public static Heuristica getHeuristica() { return BuscaLRTA.heuristica; }
 
-    public Plano getCurrentPlan() {
-        return currentPlan;
-    }
+    public Plano getCurrentPlan() { return currentPlan; }
+
 }
