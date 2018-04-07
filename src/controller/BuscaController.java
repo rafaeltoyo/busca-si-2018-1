@@ -39,6 +39,8 @@ public class BuscaController
             case ESTRELA_2:
                 busca = (new BuscaInformada(agente.getProblem(), new HeuristicaEuclidiana()));
                 break;
+            case LRTA_1:
+                busca = (new BuscaLRTA(agente.getProblem(), new HeuristicaChebyshev()));
         }
         agente.setBusca(busca);
         bufferBuscas.add(busca);
