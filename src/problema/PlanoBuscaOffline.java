@@ -4,7 +4,7 @@ import arvore.TreeNode;
 
 import java.util.Stack;
 
-public class PlanoBuscaCega implements Plano
+public class PlanoBuscaOffline implements Plano
 {
 
     private final Stack<TreeNode> plan = new Stack<>();

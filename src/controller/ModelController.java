@@ -17,9 +17,9 @@ public class ModelController
         model = null;
     }
 
-    public Model make()
+    public Model makeLab9x9()
     {
-        model = new Model(9, 9);
+        Model model = new Model(9, 9);
         model.labir.porParedeVertical(0, 1, 0);
         model.labir.porParedeVertical(0, 0, 1);
         model.labir.porParedeVertical(5, 8, 1);
@@ -41,10 +41,10 @@ public class ModelController
     }
 
     public Model getModel() {
-        if (model == null) {
-            make();
+        if (this.model == null) {
+            this.model = makeLab9x9();
         }
-        return model;
+        return this.model;
     }
 
 }
