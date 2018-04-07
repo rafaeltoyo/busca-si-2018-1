@@ -15,6 +15,7 @@ public class PlanoLRTA implements Plano
 
     private int chosenNextAction = 0, pathSize = 0;
     private float pathCost = 0;
+    private final static Random rand = new Random(System.currentTimeMillis());
 
     public PlanoLRTA()
     {
@@ -26,19 +27,17 @@ public class PlanoLRTA implements Plano
     {
         int currentAction = 0, chosenAction = 0;
         float minCost = 10000000;
-        Random rand = new Random();
 
-        BuscaLRTA.getProblema().acoesPossiveis(this.current);
         for (int flagAction : BuscaLRTA.getProblema().acoesPossiveis(this.current)) {
             // Se for possível executar a ação ...
             if (flagAction != -1) {
-                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + 1 < minCost) {
-                    minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()];
+                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + BuscaLRTA.getProblema().obterCustoAcao(this.current, currentAction, this.current) < minCost) {
+                    minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + BuscaLRTA.getProblema().obterCustoAcao(this.current, currentAction, this.current);
                     chosenAction = currentAction;
                 }
-                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + 1 == minCost) {
-                    if(rand.nextInt(100) + 1 >= 50) {
-                        minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()];
+                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + BuscaLRTA.getProblema().obterCustoAcao(this.current, currentAction, this.current) == minCost) {
+                    if (rand.nextInt(100) + 1 >= 50) {
+                        minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + BuscaLRTA.getProblema().obterCustoAcao(this.current, currentAction, this.current);
                         chosenAction = currentAction;
                     }
                 }
