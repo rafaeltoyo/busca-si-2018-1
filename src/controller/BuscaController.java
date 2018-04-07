@@ -2,14 +2,18 @@ package controller;
 
 import algoritmos.busca.*;
 import algoritmos.heuristica.HeuristicaChebyshev;
-import algoritmos.heuristica.HeuristicaColunas;
 import algoritmos.heuristica.HeuristicaEuclidiana;
 import sistema.Agente;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BuscaController
 {
-    private BuscaCega busca;
-    private Agente agente;
+
+    public final static List<Busca> bufferBuscas = new ArrayList<>();
+
+    // #################################################################################################################
 
     private static BuscaController ourInstance = new BuscaController();
 
@@ -17,59 +21,27 @@ public class BuscaController
         return ourInstance;
     }
 
-    private BuscaController()
-    {
-        this.agente = null;
-        this.busca = null;
-    }
+    private BuscaController() {}
 
-    public void prepare(TipoBusca tipo)
-    {
-        if (this.agente == null) {
-            throw new RuntimeException("Agente não inicializado");
-        }
+    // #################################################################################################################
 
+    public static Busca prepare(Agente agente, TipoBusca tipo)
+    {
+        Busca busca = null;
         switch (tipo) {
             default:
             case CUSTO_UNI:
-                this.busca = new BuscaCustoUni(this.agente);
+                busca = (new BuscaCustoUniforme(agente.getProblem()));
                 break;
             case ESTRELA_1:
-                this.busca = new BuscaEstrela(this.agente, new HeuristicaColunas());
+                busca = (new BuscaInformada(agente.getProblem(), new HeuristicaChebyshev()));
                 break;
             case ESTRELA_2:
-                this.busca = new BuscaEstrela(this.agente, new HeuristicaEuclidiana());
+                busca = (new BuscaInformada(agente.getProblem(), new HeuristicaEuclidiana()));
                 break;
         }
-    }
-
-    public void execute() throws RuntimeException
-    {
-        if (this.agente == null) {
-            throw new RuntimeException("Agente não inicializado");
-        }
-
-        if (this.busca == null) {
-            throw new RuntimeException("Busca não preparada");
-        }
-
-        this.busca.exec();
-        this.busca.setAgentePlan();
-    }
-
-    public BuscaCega getBusca() {
+        agente.setBusca(busca);
+        bufferBuscas.add(busca);
         return busca;
-    }
-
-    public void setBusca(BuscaCega busca) {
-        this.busca = busca;
-    }
-
-    public Agente getAgente() {
-        return agente;
-    }
-
-    public void setAgente(Agente agente) {
-        this.agente = agente;
     }
 }

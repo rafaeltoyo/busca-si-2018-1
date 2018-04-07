@@ -11,22 +11,22 @@ public class Labirinto {
     /*Array que representa o labirinto sendo as posições = 1 aquelas que 
       contêm paredes */
     public int parede[][]; 
-    /*Número máximo de colunas do labirinto */
-    private final int maxCol;      
     /*Número máximo de linhas do labirinto */
-    private final int maxLin;     
-    
-    public Labirinto(int maxColunas, int maxLinhas) {
-        maxCol = maxColunas;
+    private final int maxLin;
+    /*Número máximo de colunas do labirinto */
+    private final int maxCol;
+
+    public Labirinto(int maxLinhas, int maxColunas) {
         maxLin = maxLinhas;
-        parede = new int[maxCol][maxLin];
+        maxCol = maxColunas;
+        parede = new int[maxLin][maxCol];
     }
     
     public int getMaxLin() {
         return this.maxLin;
     }
     public int getMaxCol() {
-        return this.maxLin;
+        return this.maxCol;
     }
     
    /** Constroi parede horizontal da coluna inicial até a final na linha indicada.
