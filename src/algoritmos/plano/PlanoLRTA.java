@@ -3,6 +3,8 @@ package algoritmos.plano;
 import algoritmos.busca.BuscaLRTA;
 import problema.Estado;
 
+import java.util.Random;
+
 public class PlanoLRTA implements Plano
 {
 
@@ -11,55 +13,63 @@ public class PlanoLRTA implements Plano
      */
     private Estado current;
 
+    private int chosenNextAction = 0, pathSize = 0;
+    private float pathCost = 0;
+
     public PlanoLRTA()
     {
         this.current = BuscaLRTA.getProblema().estIni;
     }
 
-    /**
-     * Plano infinito, busca gerando soluções que eventualmente podem ser ótimas.
-     * @todo Comparar os estados vizinho com o (custo + 1) e mover
-     * @return boolean
-     */
     @Override
     public boolean nextAction()
     {
+        int currentAction = 0, chosenAction = 0;
+        float minCost = 10000000;
+        Random rand = new Random();
+
         BuscaLRTA.getProblema().acoesPossiveis(this.current);
-        // Trabalhar com as ações possíveis
-        // ...
+        for (int flagAction : BuscaLRTA.getProblema().acoesPossiveis(this.current)) {
+            // Se for possível executar a ação ...
+            if (flagAction != -1) {
+                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + 1 < minCost) {
+                    minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()];
+                    chosenAction = currentAction;
+                }
+                if (BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()] + 1 == minCost) {
+                    if(rand.nextInt(100) + 1 >= 50) {
+                        minCost = BuscaLRTA.getMemory()[BuscaLRTA.getProblema().suc(this.current, currentAction).getLin()][BuscaLRTA.getProblema().suc(this.current, currentAction).getCol()];
+                        chosenAction = currentAction;
+                    }
+                }
+            }
+            currentAction++;
+        }
+        BuscaLRTA.getMemory()[this.current.getLin()][this.current.getCol()] = minCost;
+        chosenNextAction = chosenAction;
+        pathCost += BuscaLRTA.getProblema().obterCustoAcao(this.current, chosenNextAction, this.current);
+        pathSize += 1;
         return true;
     }
 
-    /**
-     * @todo Retornar a ação que leva ao estado current
-     * @return
-     */
     @Override
     public int getAction()
     {
-        // retornar a ação possível escolhida
-        // ...
-        return 0;
+        return chosenNextAction;
     }
 
-    /**
-     * @todo Salvar e retornar o custo da solução até o momento
-     * @return
-     */
+
     @Override
     public float getCurrentCost()
     {
-        return 0;
+        return pathCost;
     }
 
-    /**
-     * @todo Retornar o tamanho atual do plano
-     * @return
-     */
+
     @Override
     public int getPlanSize()
     {
-        return 0;
+        return pathSize;
     }
 
     /**
