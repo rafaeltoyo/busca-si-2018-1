@@ -1,19 +1,25 @@
 package algoritmos.plano;
 
+import algoritmos.busca.BuscaLRTA;
 import problema.Estado;
 
 public class PlanoLRTA implements Plano
 {
 
-    private Estado current;
+    /**
+     * Referência para a BuscaLRTA para obter informações
+     */
+    private BuscaLRTA busca;
 
     /**
-     * Memória de controle da busca
+     * Crença de aonde o agente está
      */
-    private int[][] labAtual;
+    private Estado current;
 
-    public PlanoLRTA()
+    public PlanoLRTA(BuscaLRTA busca)
     {
+        this.busca = busca;
+        this.current = this.busca.getProblema().estIni;
     }
 
     /**
@@ -24,7 +30,9 @@ public class PlanoLRTA implements Plano
     @Override
     public boolean nextAction()
     {
-        this.current = null;
+        this.busca.getProblema().acoesPossiveis(this.current);
+        // Trabalhar com as ações possíveis
+        // ...
         return true;
     }
 
@@ -35,18 +43,44 @@ public class PlanoLRTA implements Plano
     @Override
     public int getAction()
     {
+        // retornar a ação possível escolhida
+        // ...
         return 0;
     }
 
+    /**
+     * @todo Salvar e retornar o custo da solução até o momento
+     * @return
+     */
     @Override
     public float getCurrentCost()
     {
         return 0;
     }
 
+    /**
+     * @todo Retornar o tamanho atual do plano
+     * @return
+     */
     @Override
     public int getPlanSize()
     {
         return 0;
     }
+
+    /**
+     * Atualiza o estado atual com base na informação passada pelo Agente
+     * @param currentState
+     */
+    @Override
+    public void updatePlan(Estado currentState)
+    {
+        this.setCurrent(currentState);
+    }
+
+    /**
+     * Atualizar o plano
+     * @param current
+     */
+    public void setCurrent(Estado current) { this.current = current; }
 }
