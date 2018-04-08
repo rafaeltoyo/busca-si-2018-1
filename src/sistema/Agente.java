@@ -1,8 +1,9 @@
 package sistema;
 
-import algoritmos.Busca;
-import algoritmos.BuscaCustoUniforme;
+import algoritmos.busca.Busca;
+import algoritmos.plano.Plano;
 import ambiente.*;
+import controller.ViewController;
 import problema.*;
 import comuns.*;
 
@@ -15,73 +16,62 @@ public class Agente implements PontosCardeais {
     Model model;
     Problema prob;
     Estado estAtu; // guarda o estado atual (posição atual do agente)
-    int plan[]={N,N,N,NE,L,L,L,L,NE,NE,L};
+    Busca busca;
+    Plano plan;
+
     double custo;
-    static int ct = -1;
+    int ct = -1;
            
     public Agente(Model m) {
+        this(m, TemplateLabirinto.makeProblemLab1());
+    }
+
+    public Agente(Model m, Problema p)
+    {
         this.model = m;
-        prob = new Problema();
-        prob.criarLabirinto(9, 9);
-        prob.crencaLabir.porParedeVertical(0, 1, 0);
-        prob.crencaLabir.porParedeVertical(0, 0, 1);
-        prob.crencaLabir.porParedeVertical(5, 8, 1);
-        prob.crencaLabir.porParedeVertical(5, 5, 2);
-        prob.crencaLabir.porParedeVertical(8, 8, 2);
-        prob.crencaLabir.porParedeHorizontal(4, 7, 0);
-        prob.crencaLabir.porParedeHorizontal(7, 7, 1);
-        prob.crencaLabir.porParedeHorizontal(3, 5, 2);
-        prob.crencaLabir.porParedeHorizontal(3, 5, 3);
-        prob.crencaLabir.porParedeHorizontal(7, 7, 3);
-        prob.crencaLabir.porParedeVertical(6, 7, 4);
-        prob.crencaLabir.porParedeVertical(5, 6, 5);
-        prob.crencaLabir.porParedeVertical(5, 7, 7);
-        
-        // Estado inicial, objetivo e atual
-        prob.defEstIni(8, 0);
-        prob.defEstObj(2, 8);
+        this.prob = p;
         this.estAtu = prob.estIni;
         this.custo = 0;
-
-        BuscaCustoUniforme estrategia = new BuscaCustoUniforme(this);
-        estrategia.printArvoreBusca();
     }
     
     /**Escolhe qual ação (UMA E SOMENTE UMA) será executada em um ciclo de raciocínio
      * @return 1 enquanto o plano não acabar; -1 quando acabar
      */
     public int deliberar() {
-        ct++;
-        int ap[];
-        ap = prob.acoesPossiveis(estAtu);
+        // Primeira iteração do deliberar execura a busca para resgatar o plano do agente
+        if (++ct == 0) plan = busca.exec();
 
-        // nao atingiu objetivo e ha acoesPossiveis a serem executadas no plano
-        if (!prob.testeObjetivo(estAtu) && ct < plan.length) {
-           System.out.println("estado atual: " + estAtu.getLin() + "," + estAtu.getCol());
-           System.out.print("açoes possiveis: {");
-           for (int i=0;i<ap.length;i++) {
-               if (ap[i]!=-1)
-                   System.out.print(acao[i]+" ");
-           }
+        // Utilização do sensor
+        plan.updatePlan(this.sensorPosicao());
 
-           executarIr(plan[ct]);
-           
-           // atualiza custo
-           if (plan[ct] % 2 == 0 ) // acoes pares = N, L, S, O
-               custo = custo + 1;
-           else
-               custo = custo + 1.5;
-           
-           System.out.println("}\nct = "+ ct + " de " + (plan.length-1) + " ação escolhida=" + acao[plan[ct]]);
-           System.out.println("custo ate o momento: " + custo);
-           System.out.println("**************************\n\n");
-           
-           // atualiza estado atual - sabendo que o ambiente eh deterministico
-           estAtu = prob.suc(estAtu, plan[ct]);
-                      
-        }
-        else
+        int[] ap = prob.acoesPossiveis(estAtu);
+        // Não atingiu objetivo e há acoesPossiveis a serem executadas no plano
+        if (!prob.testeObjetivo(estAtu) && plan.nextAction()) {
+
+            // Estado atual
+            ViewController.printEstadoAtual(estAtu);
+
+            // Ações possíveis
+            ViewController.printAcoesPossiveis(ap);
+
+            // Executar a próxima ação do plano
+            executarIr(plan.getAction());
+
+            // Atualiza o custo até o momento
+            custo = plan.getCurrentCost();
+
+            ViewController.printSeparador();
+            System.out.println("ct = " + ct + " de " + plan.getPlanSize());
+            System.out.println("Ação escolhida = " + acao[plan.getAction()]);
+            System.out.println("Custo ate o momento: " + custo);
+            ViewController.printSeparador();
+
+            // atualiza estado atual - sabendo que o ambiente é deterministico
+            estAtu = prob.suc(estAtu, plan.getAction());
+
+        } else {
             return (-1);
+        }
         
         return 1;
     }
@@ -106,14 +96,16 @@ public class Agente implements PontosCardeais {
         return new Estado(pos[0], pos[1]);
     }
 
-    public Problema getProblem()
-    {
-        return this.prob;
+    public Problema getProblem() { return this.prob; }
+
+    public Model getModel() { return this.model; }
+
+    public Busca getBusca() {
+        return busca;
     }
 
-    public Model getModel()
-    {
-        return this.model;
+    public void setBusca(Busca busca) {
+        this.busca = busca;
     }
 }
     

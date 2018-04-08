@@ -13,27 +13,35 @@ import comuns.*;
  */
 public class Problema implements PontosCardeais {
 
-    /**Estado inicial para um problema de busca (linha, coluna) */
+    /**
+     * Estado inicial para um problema de busca (linha, coluna)
+     */
     public Estado estIni = new Estado(0, 0);
-    /**Estado objetivo para um problema de busca (linha, coluna) */
+
+    /**
+     * Estado objetivo para um problema de busca (linha, coluna)
+     */
     public Estado estObj = new Estado(0, 0);
-    /**Crença do agente sobre o estado do labirinto, i.e. a posição de suas paredes */
+
+    /**
+     * Crença do agente sobre o estado do labirinto, i.e. a posição de suas paredes
+     */
     public Labirinto crencaLabir;
 
-
-    /**Este método instancia um labirinto - representa o que o agente crê ser
-     * o labirinto. As paredes devem ser colocadas fora desta classe porque este
-     * pacote é utilizado para construir labirintos diferentes.
+    /**
+     * Este método instancia um labirinto - representa o que o agente crê ser o labirinto.
+     * As paredes devem ser colocadas fora desta classe porque este pacote é utilizado para construir labirintos diferentes.
+     *
      * @param maxLin máximo de linhas do labirinto
      * @param maxCol máximo de colunas do labirinto
      */
     public void criarLabirinto(int maxLin, int maxCol) {
         this.crencaLabir = new Labirinto(maxLin, maxCol);
-       
     }
 
     /**
      * Define estado inicial
+     *
      * @param lin
      * @param col
      */
@@ -43,6 +51,7 @@ public class Problema implements PontosCardeais {
 
     /**
      * Define estado objetivo
+     *
      * @param lin
      * @param col
      */
