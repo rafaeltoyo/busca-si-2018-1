@@ -42,9 +42,6 @@ public class MainController
 
     public void runBuscaAll()
     {
-        runBuscaOffline(TipoBusca.CUSTO_UNI);
-        runBuscaOffline(TipoBusca.ESTRELA_1);
-        runBuscaOffline(TipoBusca.ESTRELA_2);
         runBuscaLRTA();
         ViewController.printDesempenho();
     }
